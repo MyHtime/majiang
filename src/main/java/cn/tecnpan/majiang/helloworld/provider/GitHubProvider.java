@@ -1,7 +1,7 @@
 package cn.tecnpan.majiang.helloworld.provider;
 
-import cn.tecnpan.majiang.helloworld.dto.AccessToken;
-import cn.tecnpan.majiang.helloworld.dto.GitHubUser;
+import cn.tecnpan.majiang.helloworld.dto.AccessTokenDto;
+import cn.tecnpan.majiang.helloworld.dto.GitHubUserDto;
 import com.alibaba.fastjson.JSON;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -22,14 +22,14 @@ public class GitHubProvider {
     /**
      * 2. Users are redirected back to your site by GitHub
      * POST https://github.com/login/oauth/access_token
-     * @param accessToken accessToken
+     * @param accessTokenDto accessTokenDto
      * @return String
      */
-    public String getAccessToken(AccessToken accessToken) {
+    public String getAccessToken(AccessTokenDto accessTokenDto) {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
 
         OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessToken));
+        RequestBody body = RequestBody.create(mediaType, JSON.toJSONString(accessTokenDto));
         Request request = new Request.Builder()
                 .url("https://github.com/login/oauth/access_token")
                 .post(body)
@@ -48,9 +48,9 @@ public class GitHubProvider {
      * Authorization: token OAUTH-TOKEN
      * GET https://api.github.com/user
      * @param accessToken accessToken
-     * @return GitHubUser
+     * @return GitHubUserDto
      */
-    public GitHubUser getGitHubUser(String accessToken) {
+    public GitHubUserDto getGitHubUser(String accessToken) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("https://api.github.com/user?access_token=" + accessToken)
@@ -58,7 +58,7 @@ public class GitHubProvider {
 
         try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
-            return JSON.parseObject(string, GitHubUser.class);
+            return JSON.parseObject(string, GitHubUserDto.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

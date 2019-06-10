@@ -3,7 +3,7 @@ package cn.tecnpan.majiang.helloworld.dto;
 /**
  * GET https://api.github.com/user
  */
-public class GitHubUser {
+public class GitHubUserDto {
     private String name;
     private Long id;
     private String bio;
