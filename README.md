@@ -8,7 +8,9 @@
 [Bootstrap 文档](https://v3.bootcss.com/)<br>
 [GitHub OAuth - 1](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/)<br>
 [GitHub OAuth - 2](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/)<br>
-[OkHttp](https://square.github.io/okhttp/)
+[OkHttp](https://square.github.io/okhttp/)<br>
+[SpringBoot DataSource](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)<br>
+[mybatis-spring-boot-autoconfigure](http://www.mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)<br>
 
 ## 工具
 [Git](https://git-scm.com/download)<br>
