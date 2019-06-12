@@ -43,14 +43,14 @@ public class AuthorizeController {
         accessTokenDto.setState(state);
         String accessToken = gitHubProvider.getAccessToken(accessTokenDto);
         GitHubUserDto gitHubUserDto = gitHubProvider.getGitHubUser(accessToken);
-        if (gitHubUserDto != null) {
+        if (gitHubUserDto != null && gitHubUserDto.getId() != null) {
             User user = new User();
             user.setAccountId(String.valueOf(gitHubUserDto.getId()));
             user.setName(gitHubUserDto.getName());
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModify(user.getGmtCreate());
+            user.setGmtModified(user.getGmtCreate());
             userService.insertUser(user);
             // 登录成功，Cookie
             response.addCookie(new Cookie("token", token));
