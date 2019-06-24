@@ -51,15 +51,17 @@ public class PublishController {
         }
         User user = null;
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            //获取浏览器的token
-            if (cookie.getName().equals("token")) {
-                String token = cookie.getValue();
-                user = userService.findUserByToken(token);
-                if (user != null) {
-                    request.getSession().setAttribute("loginUser", user);
+        if (cookies != null && cookies.length != 0) {
+            for (Cookie cookie : cookies) {
+                //获取浏览器的token
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    user = userService.findUserByToken(token);
+                    if (user != null) {
+                        request.getSession().setAttribute("loginUser", user);
+                    }
+                    break;
                 }
-                break;
             }
         }
         if (user == null) {

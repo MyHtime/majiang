@@ -15,7 +15,8 @@
 ## 工具
 [Git](https://git-scm.com/download)<br>
 [Visual Paradigm](https://www.visual-paradigm.com)<br>
-[flyway](https://flywaydb.org/)
+[flyway](https://flywaydb.org/)  
+[lombok](https://www.projectlombok.org/)
 
 ## 脚本
 ```sql
@@ -28,4 +29,7 @@ CREATE TABLE USER
     GMT_CREATE BIGINT,
     GMT_MODIFIED BIGINT
 );
+```
+```
+mvn flyway:migrate
 ```
