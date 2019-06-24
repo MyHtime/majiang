@@ -1,11 +1,13 @@
 package cn.tecnpan.majiang.helloworld.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * GET https://api.github.com/user
  */
-@Data
+@Getter
+@Setter
 public class GitHubUserDto {
     private String name;
     private Long id;

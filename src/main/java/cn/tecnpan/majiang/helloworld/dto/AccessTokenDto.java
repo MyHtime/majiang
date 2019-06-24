@@ -1,8 +1,10 @@
 package cn.tecnpan.majiang.helloworld.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class AccessTokenDto {
 
     private String client_id;

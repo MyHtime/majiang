@@ -1,8 +1,10 @@
 package cn.tecnpan.majiang.helloworld.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class Question {
     private Integer id;
     /**
@@ -32,7 +34,7 @@ public class Question {
      */
     private Integer commentCount;
     /**
-     * 点赞数
+     * 评论数
      */
     private Integer likeCount;
 }
