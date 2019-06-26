@@ -43,6 +43,9 @@ public class IndexController {
         }
 
         List<QuestionDto> questionDtoList = questionService.getList();
+        for (QuestionDto questionDto : questionDtoList) {
+            questionDto.setDescription("description");
+        }
         model.addAttribute("questions", questionDtoList);
         return "index";
     }

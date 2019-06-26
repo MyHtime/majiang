@@ -16,7 +16,9 @@
 [Git](https://git-scm.com/download)<br>
 [Visual Paradigm](https://www.visual-paradigm.com)<br>
 [flyway](https://flywaydb.org/)  
-[lombok](https://www.projectlombok.org/)
+[lombok](https://www.projectlombok.org/)  
+springboot热部署：[Spring Dev Tool](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#using-boot-devtools)  
+Google插件：[Live Reload](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei/related)  
 
 ## 脚本
 ```sql
