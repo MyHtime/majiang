@@ -20,7 +20,7 @@ public interface QuestionMapper {
     void insert(Question question);
 
     /**
-     * 如果需要传递过个参数 column="{"key"=列名,"key"=列名}"  key自定义
+     * 如果需要传递过个参数 column="{"key"=列名,"key"=列名}"  key自定义，单个参数不要这么写
      * 另一个查询中获取传递过来的参数  #{key}
      */
     @Select("select * from question")

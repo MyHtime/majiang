@@ -28,18 +28,17 @@ public class IndexController {
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model) {
         Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            return "index";
-        }
-        for (Cookie cookie : cookies) {
-            //获取浏览器的token
-            if (cookie.getName().equals("token")) {
-                String token = cookie.getValue();
-                User user = userService.findUserByToken(token);
-                if (user != null) {
-                    request.getSession().setAttribute("loginUser", user);
+        if (cookies != null && cookies.length != 0) {
+            for (Cookie cookie : cookies) {
+                //获取浏览器的token
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    User user = userService.findUserByToken(token);
+                    if (user != null) {
+                        request.getSession().setAttribute("loginUser", user);
+                    }
+                    break;
                 }
-                break;
             }
         }
 
