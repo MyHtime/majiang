@@ -1,5 +1,6 @@
 package cn.tecnpan.majiang.helloworld.service;
 
+import cn.tecnpan.majiang.helloworld.dto.PaginationDto;
 import cn.tecnpan.majiang.helloworld.dto.QuestionDto;
 import cn.tecnpan.majiang.helloworld.model.Question;
 
@@ -9,5 +10,5 @@ public interface QuestionService {
 
     void createQuestion(Question question);
 
-    List<QuestionDto> getList();
+    PaginationDto<QuestionDto> getList(Integer pageNo, Integer pageSize);
 }

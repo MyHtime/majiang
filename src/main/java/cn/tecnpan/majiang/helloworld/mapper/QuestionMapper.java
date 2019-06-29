@@ -6,6 +6,7 @@ import cn.tecnpan.majiang.helloworld.model.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -22,8 +23,11 @@ public interface QuestionMapper {
     /**
      * 如果需要传递过个参数 column="{"key"=列名,"key"=列名}"  key自定义，单个参数不要这么写
      * 另一个查询中获取传递过来的参数  #{key}
+     * SQL分页(原生)
+     * @param offset 偏移量
+     * @param pageSize 每页数量
      */
-    @Select("select * from question")
+    @Select("select * from question limit #{offset}, #{pageSize}")
     @Results(id = "questionDto", value = {
 //            @Result(id = true, column = "id", property = "id"),
 //            @Result(column = "title", property = "title"),
@@ -37,5 +41,8 @@ public interface QuestionMapper {
 //            @Result(column = "like_count", property = "likeCount"),
             @Result(column = "creator", property = "user", javaType = User.class, one = @One(select = "cn.tecnpan.majiang.helloworld.mapper.UserMapper.selectById"))
     })
-    List<QuestionDto> list();
+    List<QuestionDto> list(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize);
+
+    @Select("select count(1) from question")
+    Integer count();
 }
