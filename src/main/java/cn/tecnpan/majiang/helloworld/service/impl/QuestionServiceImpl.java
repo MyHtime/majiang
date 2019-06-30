@@ -33,4 +33,23 @@ public class QuestionServiceImpl implements QuestionService {
         pagination.init(pageNo);
         return pagination;
     }
+
+    /**
+     * 根据UserId查询问题
+     * @param id userID
+     */
+    @Override
+    public PaginationDto<QuestionDto> list(Integer id, Integer pageNo, Integer pageSize) {
+        PaginationDto<QuestionDto> pagination = new PaginationDto<>(questionMapper.countByUserId(id), pageSize);
+        if (pageNo < 1) {
+            pageNo = 1;
+        }
+        if (pageNo > pagination.getTotalPage()) {
+            pageNo = pagination.getTotalPage();
+        }
+        Integer offset = pageSize * (pageNo - 1);
+        pagination.setObjectList(questionMapper.listByUserId(offset, pageSize, id));
+        pagination.init(pageNo);
+        return pagination;
+    }
 }

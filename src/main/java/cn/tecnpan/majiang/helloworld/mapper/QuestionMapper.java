@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.One;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
@@ -45,4 +46,11 @@ public interface QuestionMapper {
 
     @Select("select count(1) from question")
     Integer count();
+
+    @Select("select * from question where creator = #{id} limit #{offset}, #{pageSize}")
+    @ResultMap("questionDto")
+    List<QuestionDto> listByUserId(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize, @Param("id") Integer id);
+
+    @Select("select count(1) from question where creator = #{id}")
+    Integer countByUserId(@Param("id") Integer id);
 }
