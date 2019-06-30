@@ -31,20 +31,6 @@ public class IndexController {
     public String index(HttpServletRequest request, Model model,
                         @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                         @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0) {
-            for (Cookie cookie : cookies) {
-                //获取浏览器的token
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    User user = userService.findUserByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("loginUser", user);
-                    }
-                    break;
-                }
-            }
-        }
 
         PaginationDto<QuestionDto> page = questionService.getList(pageNo, pageSize);
         model.addAttribute("pagination", page);
