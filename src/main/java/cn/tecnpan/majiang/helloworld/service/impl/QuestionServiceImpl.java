@@ -52,4 +52,9 @@ public class QuestionServiceImpl implements QuestionService {
         pagination.init(pageNo);
         return pagination;
     }
+
+    @Override
+    public QuestionDto getById(String id) {
+        return questionMapper.findById(id);
+    }
 }

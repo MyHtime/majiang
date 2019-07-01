@@ -13,4 +13,6 @@ public interface QuestionService {
     PaginationDto<QuestionDto> getList(Integer pageNo, Integer pageSize);
 
     PaginationDto<QuestionDto> list(Integer id, Integer pageNo, Integer pageSize);
+
+    QuestionDto getById(String id);
 }
