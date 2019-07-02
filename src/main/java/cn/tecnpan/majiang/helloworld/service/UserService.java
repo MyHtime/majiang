@@ -7,4 +7,6 @@ public interface UserService {
     void insertUser(User user);
 
     User findUserByToken(String token);
+
+    void createOrUpdate(User user);
 }

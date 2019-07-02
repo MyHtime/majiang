@@ -36,7 +36,7 @@ public interface QuestionMapper {
 //            @Result(column = "tag", property = "tag"),
 //            @Result(column = "gmt_create", property = "gmtCreate"),
 //            @Result(column = "gmt_modified", property = "gmtModified"),
-//            @Result(column = "creator", property = "creator"),
+            @Result(column = "creator", property = "creator"),
 //            @Result(column = "view_count", property = "viewCount"),
 //            @Result(column = "comment_count", property = "commentCount"),
 //            @Result(column = "like_count", property = "likeCount"),
