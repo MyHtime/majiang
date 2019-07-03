@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -56,5 +57,8 @@ public interface QuestionMapper {
 
     @Select("select * from question where id = #{id}")
     @ResultMap("questionDto")
-    QuestionDto findById(@Param("id") String id);
+    QuestionDto findById(@Param("id") Integer id);
+
+    @Update("update question set title = #{title}, description = #{description}, gmt_modified = #{gmtModified}, tag = #{tag} where id = #{id}")
+    void update(Question question);
 }

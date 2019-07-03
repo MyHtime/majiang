@@ -1,5 +1,6 @@
 package cn.tecnpan.majiang.helloworld.controller;
 
+import cn.tecnpan.majiang.helloworld.dto.QuestionDto;
 import cn.tecnpan.majiang.helloworld.model.Question;
 import cn.tecnpan.majiang.helloworld.model.User;
 import cn.tecnpan.majiang.helloworld.service.QuestionService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -22,10 +24,22 @@ public class PublishController {
         return "publish";
     }
 
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id, Model model) {
+
+        QuestionDto questionDto = questionService.getById(id);
+        model.addAttribute("id", questionDto.getId());
+        model.addAttribute("tag", questionDto.getTag());
+        model.addAttribute("title", questionDto.getTitle());
+        model.addAttribute("description", questionDto.getDescription());
+        return "publish";
+    }
+
     @PostMapping("/publish")
     public String doPublish(@RequestParam(name = "title") String title,
                             @RequestParam(name = "description") String description,
                             @RequestParam(name = "tag") String tag,
+                            @RequestParam(name = "id", required = false) Integer id,
                             @SessionAttribute(name = "loginUser") User user,
                             Model model) {
         model.addAttribute("tag", tag);
@@ -54,9 +68,8 @@ public class PublishController {
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(question.getGmtCreate());
-        questionService.createQuestion(question);
+        question.setId(id);
+        questionService.createOrUpdate(question);
         return "redirect:/";
     }
 }

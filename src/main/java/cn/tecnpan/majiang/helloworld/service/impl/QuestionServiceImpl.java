@@ -54,7 +54,21 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDto getById(String id) {
+    public QuestionDto getById(Integer id) {
         return questionMapper.findById(id);
+    }
+
+    @Override
+    public void createOrUpdate(Question question) {
+        if (question.getId() == null) {
+            //创建
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.insert(question);
+        } else {
+            //更新
+            question.setGmtModified(System.currentTimeMillis());
+            questionMapper.update(question);
+        }
     }
 }

@@ -6,11 +6,11 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>发布 - 码匠社区</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/community.css">
-    <script type="application/javascript" src="js/jquery-3.4.0.min.js"></script>
-    <script type="application/javascript" src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}">
+    <link rel="stylesheet" th:href="@{/css/community.css}">
+    <script type="application/javascript" th:src="@{/js/jquery-3.4.0.min.js}"></script>
+    <script type="application/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 </head>
 <body>
 <div th:replace="common/navigation :: nav"></div>
@@ -20,6 +20,7 @@
             <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
             <hr>
             <form action="/publish" method="post">
+                <input type="hidden" th:if="${id != null}" th:value="${id}" name="id">
                 <div class="form-group">
                     <label for="title">问题标题（简单扼要）:</label>
                     <input type="text" class="form-control" name="title" th:value="${title}" id="title" placeholder="问题标题……">
@@ -36,8 +37,8 @@
                     <div class="row">
 <!--                        <div class="alert alert-danger col-lg-9 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error != null}"></div>-->
 <!--                        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error == null}"></div>-->
-                        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error == null}">
-                            <div class="alert alert-danger col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error == null}">
+                        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                            <div class="alert alert-danger col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error != null}">
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
