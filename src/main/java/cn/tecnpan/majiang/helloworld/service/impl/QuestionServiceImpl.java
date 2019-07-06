@@ -2,6 +2,8 @@ package cn.tecnpan.majiang.helloworld.service.impl;
 
 import cn.tecnpan.majiang.helloworld.dto.PaginationDto;
 import cn.tecnpan.majiang.helloworld.dto.QuestionDto;
+import cn.tecnpan.majiang.helloworld.code.impl.CustomizeErrorCodeImpl;
+import cn.tecnpan.majiang.helloworld.exception.CustomizeException;
 import cn.tecnpan.majiang.helloworld.mapper.QuestionMapper;
 import cn.tecnpan.majiang.helloworld.mapper.UserMapper;
 import cn.tecnpan.majiang.helloworld.model.Question;
@@ -87,6 +89,9 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionDto getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCodeImpl.QUESTION_NOT_FOUND);
+        }
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         QuestionDto questionDto = new QuestionDto();
         BeanUtils.copyProperties(question, questionDto);
@@ -110,7 +115,10 @@ public class QuestionServiceImpl implements QuestionService {
 
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(questionRecord, questionExample);
+            int row = questionMapper.updateByExampleSelective(questionRecord, questionExample);
+            if (row == 0) {
+                throw new CustomizeException(CustomizeErrorCodeImpl.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
