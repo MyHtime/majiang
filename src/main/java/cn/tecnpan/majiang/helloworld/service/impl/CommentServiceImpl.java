@@ -12,6 +12,7 @@ import cn.tecnpan.majiang.helloworld.model.Question;
 import cn.tecnpan.majiang.helloworld.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class CommentServiceImpl implements CommentService {
      * @param comment 评论
      */
     @Override
+    @Transactional
     public void insert(Comment comment) {
         if (comment.getParentId() == null || comment.getParentId() == 0) {
             throw new CustomizeException(CustomizeErrorEnum.TARGET_PARAM_NOT_FOUND);
