@@ -18,6 +18,8 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String question(@PathVariable("id") Integer id, Model model) {
         QuestionDto questionDto = questionService.getById(id);
+        //每成功访问一次，增加一次阅读量
+        questionService.incView(id);
         model.addAttribute("question", questionDto);
         return "question";
     }

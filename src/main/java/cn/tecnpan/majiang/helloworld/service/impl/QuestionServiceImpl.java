@@ -4,6 +4,7 @@ import cn.tecnpan.majiang.helloworld.dto.PaginationDto;
 import cn.tecnpan.majiang.helloworld.dto.QuestionDto;
 import cn.tecnpan.majiang.helloworld.code.impl.CustomizeErrorCodeImpl;
 import cn.tecnpan.majiang.helloworld.exception.CustomizeException;
+import cn.tecnpan.majiang.helloworld.mapper.QuestionExtMapper;
 import cn.tecnpan.majiang.helloworld.mapper.QuestionMapper;
 import cn.tecnpan.majiang.helloworld.mapper.UserMapper;
 import cn.tecnpan.majiang.helloworld.model.Question;
@@ -23,6 +24,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    /**
+     * QuestionMapper的扩展mapper即写自定义SQL，防止MBG执行时被覆盖
+     */
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -120,5 +127,17 @@ public class QuestionServiceImpl implements QuestionService {
                 throw new CustomizeException(CustomizeErrorCodeImpl.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    /**
+     * 增加阅读数
+     * @param id question id
+     */
+    @Override
+    public void incView(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }
