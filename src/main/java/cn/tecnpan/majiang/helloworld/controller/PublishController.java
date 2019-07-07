@@ -25,7 +25,7 @@ public class PublishController {
     }
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(name = "id") Integer id, Model model) {
+    public String edit(@PathVariable(name = "id") Long id, Model model) {
 
         QuestionDto questionDto = questionService.getById(id);
         model.addAttribute("id", questionDto.getId());
@@ -39,7 +39,7 @@ public class PublishController {
     public String doPublish(@RequestParam(name = "title") String title,
                             @RequestParam(name = "description") String description,
                             @RequestParam(name = "tag") String tag,
-                            @RequestParam(name = "id", required = false) Integer id,
+                            @RequestParam(name = "id", required = false) Long id,
                             @SessionAttribute(name = "loginUser") User user,
                             Model model) {
         model.addAttribute("tag", tag);
@@ -69,6 +69,9 @@ public class PublishController {
         question.setTag(tag);
         question.setCreator(user.getId());
         question.setId(id);
+        question.setCommentCount(0);
+        question.setViewCount(0);
+        question.setLikeCount(0);
         questionService.createOrUpdate(question);
         return "redirect:/";
     }

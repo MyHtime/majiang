@@ -8,5 +8,6 @@ import org.apache.ibatis.annotations.Param;
  * 自定义SQL
  */
 public interface QuestionExtMapper {
-    void incView(@Param("record") Question question);
+    void incViewCount(@Param("record") Question question);
+    void incCommentCount(@Param("record") Question question);
 }

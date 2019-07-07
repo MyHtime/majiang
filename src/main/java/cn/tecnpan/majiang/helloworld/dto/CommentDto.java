@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 public class CommentDto {
 
-    private Integer parentId;
+    private Long parentId;
     private Integer type;
     private String content;
 }

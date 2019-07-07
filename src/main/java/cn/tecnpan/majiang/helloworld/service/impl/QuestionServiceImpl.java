@@ -2,7 +2,7 @@ package cn.tecnpan.majiang.helloworld.service.impl;
 
 import cn.tecnpan.majiang.helloworld.dto.PaginationDto;
 import cn.tecnpan.majiang.helloworld.dto.QuestionDto;
-import cn.tecnpan.majiang.helloworld.code.impl.CustomizeErrorCodeImpl;
+import cn.tecnpan.majiang.helloworld.enums.CustomizeErrorEnum;
 import cn.tecnpan.majiang.helloworld.exception.CustomizeException;
 import cn.tecnpan.majiang.helloworld.mapper.QuestionExtMapper;
 import cn.tecnpan.majiang.helloworld.mapper.QuestionMapper;
@@ -68,7 +68,7 @@ public class QuestionServiceImpl implements QuestionService {
      * @param userId userID
      */
     @Override
-    public PaginationDto<QuestionDto> list(Integer userId, Integer pageNo, Integer pageSize) {
+    public PaginationDto<QuestionDto> list(Long userId, Integer pageNo, Integer pageSize) {
         PaginationDto<QuestionDto> pagination = new PaginationDto<>((int)questionMapper.countByExample(new QuestionExample()), pageSize);
         if (pageNo < 1) {
             pageNo = 1;
@@ -94,10 +94,10 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDto getById(Integer id) {
+    public QuestionDto getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
-            throw new CustomizeException(CustomizeErrorCodeImpl.QUESTION_NOT_FOUND);
+            throw new CustomizeException(CustomizeErrorEnum.QUESTION_NOT_FOUND);
         }
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         QuestionDto questionDto = new QuestionDto();
@@ -112,7 +112,7 @@ public class QuestionServiceImpl implements QuestionService {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.insertSelective(question);
+            questionMapper.insert(question);
         } else {
             //更新
             question.setGmtModified(System.currentTimeMillis());
@@ -124,7 +124,7 @@ public class QuestionServiceImpl implements QuestionService {
             questionExample.createCriteria().andIdEqualTo(question.getId());
             int row = questionMapper.updateByExampleSelective(questionRecord, questionExample);
             if (row == 0) {
-                throw new CustomizeException(CustomizeErrorCodeImpl.QUESTION_NOT_FOUND);
+                throw new CustomizeException(CustomizeErrorEnum.QUESTION_NOT_FOUND);
             }
         }
     }
@@ -134,10 +134,10 @@ public class QuestionServiceImpl implements QuestionService {
      * @param id question id
      */
     @Override
-    public void incView(Integer id) {
+    public void incView(Long id) {
         Question question = new Question();
         question.setId(id);
         question.setViewCount(1);
-        questionExtMapper.incView(question);
+        questionExtMapper.incViewCount(question);
     }
 }

@@ -16,7 +16,7 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping("/question/{id}")
-    public String question(@PathVariable("id") Integer id, Model model) {
+    public String question(@PathVariable("id") Long id, Model model) {
         QuestionDto questionDto = questionService.getById(id);
         //每成功访问一次，增加一次阅读量
         questionService.incView(id);

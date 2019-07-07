@@ -15,9 +15,14 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.tecnpan.majiang.helloworld.model.Question">
     <result column="DESCRIPTION" jdbcType="CLOB" property="description" />
   </resultMap>
-  <update id="incView">
+  <update id="incViewCount">
     update QUESTION
     set VIEW_COUNT = VIEW_COUNT + #{record.viewCount,jdbcType=INTEGER}
+    where ID = #{record.id}
+  </update>
+  <update id="incCommentCount">
+    update QUESTION
+    set COMMENT_COUNT = COMMENT_COUNT + #{record.commentCount,jdbcType=INTEGER}
     where ID = #{record.id}
   </update>
 </mapper>

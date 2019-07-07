@@ -1,6 +1,8 @@
 package cn.tecnpan.majiang.helloworld.controller;
 
 import cn.tecnpan.majiang.helloworld.dto.CommentDto;
+import cn.tecnpan.majiang.helloworld.dto.ResultDto;
+import cn.tecnpan.majiang.helloworld.enums.CustomizeErrorEnum;
 import cn.tecnpan.majiang.helloworld.model.Comment;
 import cn.tecnpan.majiang.helloworld.model.User;
 import cn.tecnpan.majiang.helloworld.service.CommentService;
@@ -23,14 +25,18 @@ public class CommentController {
     @PostMapping("/comment")
     @ResponseBody
     public Object post(@SessionAttribute(name = "loginUser") User user, @RequestBody CommentDto commentDto) {
+        if (user == null) {
+            return ResultDto.errorOf(CustomizeErrorEnum.USER_NOT_LOGIN);
+        }
         Comment comment = new Comment();
         comment.setParentId(commentDto.getParentId());
         comment.setContent(commentDto.getContent());
         comment.setType(commentDto.getType());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModify(System.currentTimeMillis());
-        comment.setCommentator(1);
+        comment.setCommentator(user.getId());
+        comment.setLikeCount(0L);
         commentService.insert(comment);
-        return comment;
+        return ResultDto.success();
     }
 }

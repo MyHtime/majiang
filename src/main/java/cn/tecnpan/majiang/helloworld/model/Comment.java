@@ -1,13 +1,13 @@
 package cn.tecnpan.majiang.helloworld.model;
 
 public class Comment {
-    private Integer id;
+    private Long id;
 
-    private Integer parentId;
+    private Long parentId;
 
     private Integer type;
 
-    private Integer commentator;
+    private Long commentator;
 
     private Long gmtCreate;
 
@@ -17,19 +17,19 @@ public class Comment {
 
     private String content;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
@@ -41,11 +41,11 @@ public class Comment {
         this.type = type;
     }
 
-    public Integer getCommentator() {
+    public Long getCommentator() {
         return commentator;
     }
 
-    public void setCommentator(Integer commentator) {
+    public void setCommentator(Long commentator) {
         this.commentator = commentator;
     }
 

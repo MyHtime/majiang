@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.tecnpan.majiang.helloworld.mapper.CommentMapper">
   <resultMap id="BaseResultMap" type="cn.tecnpan.majiang.helloworld.model.Comment">
-    <id column="ID" jdbcType="INTEGER" property="id" />
-    <result column="PARENT_ID" jdbcType="INTEGER" property="parentId" />
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="PARENT_ID" jdbcType="BIGINT" property="parentId" />
     <result column="TYPE" jdbcType="INTEGER" property="type" />
-    <result column="COMMENTATOR" jdbcType="INTEGER" property="commentator" />
+    <result column="COMMENTATOR" jdbcType="BIGINT" property="commentator" />
     <result column="GMT_CREATE" jdbcType="BIGINT" property="gmtCreate" />
     <result column="GMT_MODIFY" jdbcType="BIGINT" property="gmtModify" />
     <result column="LIKE_COUNT" jdbcType="BIGINT" property="likeCount" />
@@ -86,15 +86,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from COMMENT
-    where ID = #{id,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from COMMENT
-    where ID = #{id,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="cn.tecnpan.majiang.helloworld.model.CommentExample">
     delete from COMMENT
@@ -106,8 +106,8 @@
     insert into COMMENT (ID, PARENT_ID, TYPE, 
       COMMENTATOR, GMT_CREATE, GMT_MODIFY, 
       LIKE_COUNT, CONTENT)
-    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
-      #{commentator,jdbcType=INTEGER}, #{gmtCreate,jdbcType=BIGINT}, #{gmtModify,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, 
+      #{commentator,jdbcType=BIGINT}, #{gmtCreate,jdbcType=BIGINT}, #{gmtModify,jdbcType=BIGINT}, 
       #{likeCount,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.tecnpan.majiang.helloworld.model.Comment">
@@ -140,16 +140,16 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="parentId != null">
-        #{parentId,jdbcType=INTEGER},
+        #{parentId,jdbcType=BIGINT},
       </if>
       <if test="type != null">
         #{type,jdbcType=INTEGER},
       </if>
       <if test="commentator != null">
-        #{commentator,jdbcType=INTEGER},
+        #{commentator,jdbcType=BIGINT},
       </if>
       <if test="gmtCreate != null">
         #{gmtCreate,jdbcType=BIGINT},
@@ -175,16 +175,16 @@
     update COMMENT
     <set>
       <if test="record.id != null">
-        ID = #{record.id,jdbcType=INTEGER},
+        ID = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.parentId != null">
-        PARENT_ID = #{record.parentId,jdbcType=INTEGER},
+        PARENT_ID = #{record.parentId,jdbcType=BIGINT},
       </if>
       <if test="record.type != null">
         TYPE = #{record.type,jdbcType=INTEGER},
       </if>
       <if test="record.commentator != null">
-        COMMENTATOR = #{record.commentator,jdbcType=INTEGER},
+        COMMENTATOR = #{record.commentator,jdbcType=BIGINT},
       </if>
       <if test="record.gmtCreate != null">
         GMT_CREATE = #{record.gmtCreate,jdbcType=BIGINT},
@@ -205,10 +205,10 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update COMMENT
-    set ID = #{record.id,jdbcType=INTEGER},
-      PARENT_ID = #{record.parentId,jdbcType=INTEGER},
+    set ID = #{record.id,jdbcType=BIGINT},
+      PARENT_ID = #{record.parentId,jdbcType=BIGINT},
       TYPE = #{record.type,jdbcType=INTEGER},
-      COMMENTATOR = #{record.commentator,jdbcType=INTEGER},
+      COMMENTATOR = #{record.commentator,jdbcType=BIGINT},
       GMT_CREATE = #{record.gmtCreate,jdbcType=BIGINT},
       GMT_MODIFY = #{record.gmtModify,jdbcType=BIGINT},
       LIKE_COUNT = #{record.likeCount,jdbcType=BIGINT},
@@ -221,13 +221,13 @@
     update COMMENT
     <set>
       <if test="parentId != null">
-        PARENT_ID = #{parentId,jdbcType=INTEGER},
+        PARENT_ID = #{parentId,jdbcType=BIGINT},
       </if>
       <if test="type != null">
         TYPE = #{type,jdbcType=INTEGER},
       </if>
       <if test="commentator != null">
-        COMMENTATOR = #{commentator,jdbcType=INTEGER},
+        COMMENTATOR = #{commentator,jdbcType=BIGINT},
       </if>
       <if test="gmtCreate != null">
         GMT_CREATE = #{gmtCreate,jdbcType=BIGINT},
@@ -242,18 +242,18 @@
         CONTENT = #{content,jdbcType=VARCHAR},
       </if>
     </set>
-    where ID = #{id,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.tecnpan.majiang.helloworld.model.Comment">
     update COMMENT
-    set PARENT_ID = #{parentId,jdbcType=INTEGER},
+    set PARENT_ID = #{parentId,jdbcType=BIGINT},
       TYPE = #{type,jdbcType=INTEGER},
-      COMMENTATOR = #{commentator,jdbcType=INTEGER},
+      COMMENTATOR = #{commentator,jdbcType=BIGINT},
       GMT_CREATE = #{gmtCreate,jdbcType=BIGINT},
       GMT_MODIFY = #{gmtModify,jdbcType=BIGINT},
       LIKE_COUNT = #{likeCount,jdbcType=BIGINT},
       CONTENT = #{content,jdbcType=VARCHAR}
-    where ID = #{id,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="cn.tecnpan.majiang.helloworld.model.CommentExample" resultMap="BaseResultMap">
     select
