@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.tecnpan.majiang.helloworld.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="cn.tecnpan.majiang.helloworld.model.User">
+<mapper namespace="cn.tecnpan.majiang.helloworld.mapper.CommentMapper">
+  <resultMap id="BaseResultMap" type="cn.tecnpan.majiang.helloworld.model.Comment">
     <id column="ID" jdbcType="INTEGER" property="id" />
-    <result column="ACCOUNT_ID" jdbcType="VARCHAR" property="accountId" />
-    <result column="NAME" jdbcType="VARCHAR" property="name" />
-    <result column="TOKEN" jdbcType="VARCHAR" property="token" />
+    <result column="PARENT_ID" jdbcType="INTEGER" property="parentId" />
+    <result column="TYPE" jdbcType="INTEGER" property="type" />
+    <result column="COMMENTATOR" jdbcType="INTEGER" property="commentator" />
     <result column="GMT_CREATE" jdbcType="BIGINT" property="gmtCreate" />
-    <result column="GMT_MODIFIED" jdbcType="BIGINT" property="gmtModified" />
-    <result column="BIO" jdbcType="VARCHAR" property="bio" />
-    <result column="AVATAR_URL" jdbcType="VARCHAR" property="avatarUrl" />
+    <result column="GMT_MODIFY" jdbcType="BIGINT" property="gmtModify" />
+    <result column="LIKE_COUNT" jdbcType="BIGINT" property="likeCount" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,15 +70,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, ACCOUNT_ID, NAME, TOKEN, GMT_CREATE, GMT_MODIFIED, BIO, AVATAR_URL
+    ID, PARENT_ID, TYPE, COMMENTATOR, GMT_CREATE, GMT_MODIFY, LIKE_COUNT, CONTENT
   </sql>
-  <select id="selectByExample" parameterType="cn.tecnpan.majiang.helloworld.model.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="cn.tecnpan.majiang.helloworld.model.CommentExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from USER
+    from COMMENT
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,114 +89,114 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from USER
+    from COMMENT
     where ID = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from USER
+    delete from COMMENT
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="cn.tecnpan.majiang.helloworld.model.UserExample">
-    delete from USER
+  <delete id="deleteByExample" parameterType="cn.tecnpan.majiang.helloworld.model.CommentExample">
+    delete from COMMENT
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="cn.tecnpan.majiang.helloworld.model.User">
-    insert into USER (ID, ACCOUNT_ID, NAME, 
-      TOKEN, GMT_CREATE, GMT_MODIFIED, 
-      BIO, AVATAR_URL)
-    values (#{id,jdbcType=INTEGER}, #{accountId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{token,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=BIGINT}, #{gmtModified,jdbcType=BIGINT}, 
-      #{bio,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="cn.tecnpan.majiang.helloworld.model.Comment">
+    insert into COMMENT (ID, PARENT_ID, TYPE, 
+      COMMENTATOR, GMT_CREATE, GMT_MODIFY, 
+      LIKE_COUNT, CONTENT)
+    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
+      #{commentator,jdbcType=INTEGER}, #{gmtCreate,jdbcType=BIGINT}, #{gmtModify,jdbcType=BIGINT}, 
+      #{likeCount,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="cn.tecnpan.majiang.helloworld.model.User">
-    insert into USER
+  <insert id="insertSelective" parameterType="cn.tecnpan.majiang.helloworld.model.Comment">
+    insert into COMMENT
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         ID,
       </if>
-      <if test="accountId != null">
-        ACCOUNT_ID,
+      <if test="parentId != null">
+        PARENT_ID,
       </if>
-      <if test="name != null">
-        NAME,
+      <if test="type != null">
+        TYPE,
       </if>
-      <if test="token != null">
-        TOKEN,
+      <if test="commentator != null">
+        COMMENTATOR,
       </if>
       <if test="gmtCreate != null">
         GMT_CREATE,
       </if>
-      <if test="gmtModified != null">
-        GMT_MODIFIED,
+      <if test="gmtModify != null">
+        GMT_MODIFY,
       </if>
-      <if test="bio != null">
-        BIO,
+      <if test="likeCount != null">
+        LIKE_COUNT,
       </if>
-      <if test="avatarUrl != null">
-        AVATAR_URL,
+      <if test="content != null">
+        CONTENT,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="accountId != null">
-        #{accountId,jdbcType=VARCHAR},
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
       </if>
-      <if test="token != null">
-        #{token,jdbcType=VARCHAR},
+      <if test="commentator != null">
+        #{commentator,jdbcType=INTEGER},
       </if>
       <if test="gmtCreate != null">
         #{gmtCreate,jdbcType=BIGINT},
       </if>
-      <if test="gmtModified != null">
-        #{gmtModified,jdbcType=BIGINT},
+      <if test="gmtModify != null">
+        #{gmtModify,jdbcType=BIGINT},
       </if>
-      <if test="bio != null">
-        #{bio,jdbcType=VARCHAR},
+      <if test="likeCount != null">
+        #{likeCount,jdbcType=BIGINT},
       </if>
-      <if test="avatarUrl != null">
-        #{avatarUrl,jdbcType=VARCHAR},
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="cn.tecnpan.majiang.helloworld.model.UserExample" resultType="java.lang.Long">
-    select count(*) from USER
+  <select id="countByExample" parameterType="cn.tecnpan.majiang.helloworld.model.CommentExample" resultType="java.lang.Long">
+    select count(*) from COMMENT
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update USER
+    update COMMENT
     <set>
       <if test="record.id != null">
         ID = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.accountId != null">
-        ACCOUNT_ID = #{record.accountId,jdbcType=VARCHAR},
+      <if test="record.parentId != null">
+        PARENT_ID = #{record.parentId,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null">
-        NAME = #{record.name,jdbcType=VARCHAR},
+      <if test="record.type != null">
+        TYPE = #{record.type,jdbcType=INTEGER},
       </if>
-      <if test="record.token != null">
-        TOKEN = #{record.token,jdbcType=VARCHAR},
+      <if test="record.commentator != null">
+        COMMENTATOR = #{record.commentator,jdbcType=INTEGER},
       </if>
       <if test="record.gmtCreate != null">
         GMT_CREATE = #{record.gmtCreate,jdbcType=BIGINT},
       </if>
-      <if test="record.gmtModified != null">
-        GMT_MODIFIED = #{record.gmtModified,jdbcType=BIGINT},
+      <if test="record.gmtModify != null">
+        GMT_MODIFY = #{record.gmtModify,jdbcType=BIGINT},
       </if>
-      <if test="record.bio != null">
-        BIO = #{record.bio,jdbcType=VARCHAR},
+      <if test="record.likeCount != null">
+        LIKE_COUNT = #{record.likeCount,jdbcType=BIGINT},
       </if>
-      <if test="record.avatarUrl != null">
-        AVATAR_URL = #{record.avatarUrl,jdbcType=VARCHAR},
+      <if test="record.content != null">
+        CONTENT = #{record.content,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -204,64 +204,64 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update USER
+    update COMMENT
     set ID = #{record.id,jdbcType=INTEGER},
-      ACCOUNT_ID = #{record.accountId,jdbcType=VARCHAR},
-      NAME = #{record.name,jdbcType=VARCHAR},
-      TOKEN = #{record.token,jdbcType=VARCHAR},
+      PARENT_ID = #{record.parentId,jdbcType=INTEGER},
+      TYPE = #{record.type,jdbcType=INTEGER},
+      COMMENTATOR = #{record.commentator,jdbcType=INTEGER},
       GMT_CREATE = #{record.gmtCreate,jdbcType=BIGINT},
-      GMT_MODIFIED = #{record.gmtModified,jdbcType=BIGINT},
-      BIO = #{record.bio,jdbcType=VARCHAR},
-      AVATAR_URL = #{record.avatarUrl,jdbcType=VARCHAR}
+      GMT_MODIFY = #{record.gmtModify,jdbcType=BIGINT},
+      LIKE_COUNT = #{record.likeCount,jdbcType=BIGINT},
+      CONTENT = #{record.content,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.tecnpan.majiang.helloworld.model.User">
-    update USER
+  <update id="updateByPrimaryKeySelective" parameterType="cn.tecnpan.majiang.helloworld.model.Comment">
+    update COMMENT
     <set>
-      <if test="accountId != null">
-        ACCOUNT_ID = #{accountId,jdbcType=VARCHAR},
+      <if test="parentId != null">
+        PARENT_ID = #{parentId,jdbcType=INTEGER},
       </if>
-      <if test="name != null">
-        NAME = #{name,jdbcType=VARCHAR},
+      <if test="type != null">
+        TYPE = #{type,jdbcType=INTEGER},
       </if>
-      <if test="token != null">
-        TOKEN = #{token,jdbcType=VARCHAR},
+      <if test="commentator != null">
+        COMMENTATOR = #{commentator,jdbcType=INTEGER},
       </if>
       <if test="gmtCreate != null">
         GMT_CREATE = #{gmtCreate,jdbcType=BIGINT},
       </if>
-      <if test="gmtModified != null">
-        GMT_MODIFIED = #{gmtModified,jdbcType=BIGINT},
+      <if test="gmtModify != null">
+        GMT_MODIFY = #{gmtModify,jdbcType=BIGINT},
       </if>
-      <if test="bio != null">
-        BIO = #{bio,jdbcType=VARCHAR},
+      <if test="likeCount != null">
+        LIKE_COUNT = #{likeCount,jdbcType=BIGINT},
       </if>
-      <if test="avatarUrl != null">
-        AVATAR_URL = #{avatarUrl,jdbcType=VARCHAR},
+      <if test="content != null">
+        CONTENT = #{content,jdbcType=VARCHAR},
       </if>
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="cn.tecnpan.majiang.helloworld.model.User">
-    update USER
-    set ACCOUNT_ID = #{accountId,jdbcType=VARCHAR},
-      NAME = #{name,jdbcType=VARCHAR},
-      TOKEN = #{token,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="cn.tecnpan.majiang.helloworld.model.Comment">
+    update COMMENT
+    set PARENT_ID = #{parentId,jdbcType=INTEGER},
+      TYPE = #{type,jdbcType=INTEGER},
+      COMMENTATOR = #{commentator,jdbcType=INTEGER},
       GMT_CREATE = #{gmtCreate,jdbcType=BIGINT},
-      GMT_MODIFIED = #{gmtModified,jdbcType=BIGINT},
-      BIO = #{bio,jdbcType=VARCHAR},
-      AVATAR_URL = #{avatarUrl,jdbcType=VARCHAR}
+      GMT_MODIFY = #{gmtModify,jdbcType=BIGINT},
+      LIKE_COUNT = #{likeCount,jdbcType=BIGINT},
+      CONTENT = #{content,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="cn.tecnpan.majiang.helloworld.model.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="cn.tecnpan.majiang.helloworld.model.CommentExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from USER
+    from COMMENT
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

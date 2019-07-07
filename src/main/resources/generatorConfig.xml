@@ -9,6 +9,14 @@
 
         <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
 
+        <!--注释-->
+        <commentGenerator>
+            <!--取消注释-->
+            <property name="suppressAllComments" value="true"/>
+            <!--取消生成注释带时间戳-->
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
         <jdbcConnection driverClass="org.h2.Driver"
                         connectionURL="jdbc:h2:~/helloworld"
                         userId="sa"
@@ -34,5 +42,6 @@
 
         <table tableName="USER" domainObjectName="User"/>
         <table tableName="QUESTION" domainObjectName="Question"/>
+        <table tableName="COMMENT" domainObjectName="Comment"/>
     </context>
 </generatorConfiguration>

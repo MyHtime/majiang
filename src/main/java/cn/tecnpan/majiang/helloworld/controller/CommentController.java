@@ -1,0 +1,36 @@
+package cn.tecnpan.majiang.helloworld.controller;
+
+import cn.tecnpan.majiang.helloworld.dto.CommentDto;
+import cn.tecnpan.majiang.helloworld.model.Comment;
+import cn.tecnpan.majiang.helloworld.model.User;
+import cn.tecnpan.majiang.helloworld.service.CommentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
+
+/**
+ * 评论
+ */
+@Controller
+public class CommentController {
+
+    @Autowired
+    private CommentService commentService;
+
+    @PostMapping("/comment")
+    @ResponseBody
+    public Object post(@SessionAttribute(name = "loginUser") User user, @RequestBody CommentDto commentDto) {
+        Comment comment = new Comment();
+        comment.setParentId(commentDto.getParentId());
+        comment.setContent(commentDto.getContent());
+        comment.setType(commentDto.getType());
+        comment.setGmtCreate(System.currentTimeMillis());
+        comment.setGmtModify(System.currentTimeMillis());
+        comment.setCommentator(1);
+        commentService.insert(comment);
+        return comment;
+    }
+}

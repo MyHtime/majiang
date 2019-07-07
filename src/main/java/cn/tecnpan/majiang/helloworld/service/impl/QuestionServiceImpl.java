@@ -112,7 +112,7 @@ public class QuestionServiceImpl implements QuestionService {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.insert(question);
+            questionMapper.insertSelective(question);
         } else {
             //更新
             question.setGmtModified(System.currentTimeMillis());
