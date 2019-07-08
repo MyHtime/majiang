@@ -84,6 +84,8 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDto> listByQuestionId(Long id) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        //按照创建时间排序
+        commentExample.setOrderByClause("gmt_create desc");
         List<Comment> commentList = commentMapper.selectByExample(commentExample);
         if (commentList.size() == 0) {
             return new ArrayList<>();

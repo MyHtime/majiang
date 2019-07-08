@@ -6,6 +6,7 @@ import cn.tecnpan.majiang.helloworld.enums.CustomizeErrorEnum;
 import cn.tecnpan.majiang.helloworld.model.Comment;
 import cn.tecnpan.majiang.helloworld.model.User;
 import cn.tecnpan.majiang.helloworld.service.CommentService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,9 @@ public class CommentController {
     public Object post(@SessionAttribute(name = "loginUser", required = false) User user, @RequestBody CommentCreateDto commentCreateDto) {
         if (user == null) {
             return ResultDto.errorOf(CustomizeErrorEnum.USER_NOT_LOGIN);
+        }
+        if (commentCreateDto == null || StringUtils.isBlank(commentCreateDto.getContent())) {
+            return ResultDto.errorOf(CustomizeErrorEnum.CONTENT_IS_EMPTY);
         }
         Comment comment = new Comment();
         comment.setParentId(commentCreateDto.getParentId());
