@@ -40,7 +40,7 @@ public class PublishController {
                             @RequestParam(name = "description") String description,
                             @RequestParam(name = "tag") String tag,
                             @RequestParam(name = "id", required = false) Long id,
-                            @SessionAttribute(name = "loginUser") User user,
+                            @SessionAttribute(name = "loginUser", required = false) User user,
                             Model model) {
         model.addAttribute("tag", tag);
         model.addAttribute("title", title);

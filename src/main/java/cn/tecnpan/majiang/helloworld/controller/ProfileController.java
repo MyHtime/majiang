@@ -22,7 +22,7 @@ public class ProfileController {
     @GetMapping("/profile/{action}")
     public String question(@PathVariable(name = "action") String action,
                            Map<String, Object> map,
-                           @SessionAttribute(name = "loginUser") User user,
+                           @SessionAttribute(name = "loginUser", required = false) User user,
                            @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                            @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize) {
         if (user == null) {

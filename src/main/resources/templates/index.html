@@ -77,4 +77,13 @@
     </div>
 </div>
 </body>
+<script>
+    $(function () {
+        var item = window.localStorage.getItem("closable");
+        window.localStorage.removeItem("closable");
+        if (item == "true") {
+            window.close();
+        }
+    });
+</script>
 </html>

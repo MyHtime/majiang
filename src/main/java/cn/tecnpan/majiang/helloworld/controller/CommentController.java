@@ -24,7 +24,7 @@ public class CommentController {
 
     @PostMapping("/comment")
     @ResponseBody
-    public Object post(@SessionAttribute(name = "loginUser") User user, @RequestBody CommentDto commentDto) {
+    public Object post(@SessionAttribute(name = "loginUser", required = false) User user, @RequestBody CommentDto commentDto) {
         if (user == null) {
             return ResultDto.errorOf(CustomizeErrorEnum.USER_NOT_LOGIN);
         }
