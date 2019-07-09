@@ -51,30 +51,20 @@ function sub_comment(e) {
     comment2target(comment_id, 2, content);
 }
 
-//<!--                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments" th:id="${'comment-'+comment.id}">-->
-// <!--                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comments" th:each="comment : ${comments}">-->
+//<!--                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comments" th:each="comment : ${comments}">-->
 // <!--                                    <div class="media">-->
 // <!--                                        <div class="media-left">-->
-// <!--                                            <span href="#">-->
-// <!--                                                <img class="media-object img-rounded" th:src="${comment.user.avatarUrl}">-->
-// <!--                                            </span>-->
+// <!--                                            <img class="media-object img-rounded" th:src="${comment.user.avatarUrl}">-->
 // <!--                                        </div>-->
 // <!--                                        <div class="media-body">-->
-// <!--                                            <h5 class="media-heading">-->
-// <!--                                                <span th:text="${comment.user.name}"></span>-->
+// <!--                                            <h5 class="media-heading" th:text="${comment.user.name}">-->
 // <!--                                            </h5>-->
 // <!--                                            <div th:text="${comment.content}"></div>-->
-// <!--                                            <div class="menu">-->
-// <!--                                                <span class="pull-right" th:text="${#dates.format(comment.gmtCreate, 'yyyy-MM-dd')}"></span>-->
+// <!--                                            <div class="menu pull-right" th:text="${#dates.format(comment.gmtCreate, 'yyyy-MM-dd')}">-->
 // <!--                                            </div>-->
 // <!--                                        </div>-->
 // <!--                                    </div>-->
 // <!--                                </div>-->
-// <!--                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
-// <!--                                    <input type="text" class="form-control" placeholder="评论一下..." th:id="${'input-'+comment.id}">-->
-// <!--                                    <button type="button" class="btn btn-success btn-sm pull-right" onclick="sub_comment(this)" th:data-id="${comment.id}">评论</button>-->
-// <!--                                </div>-->
-// <!--                            </div>-->
 
 /**
  * 展开/折叠二级评论
@@ -90,17 +80,48 @@ function collapseComments(e) {
         $comment.removeClass("in");
         e.removeAttribute("data-collapse");
         e.classList.remove("active");
+        $comment.children(".comments").remove();
     } else {
 
         $.getJSON("/comment/" +id,function (data) {
-            console.log(data);
-        });
+            $.each(data.data.reverse(), function (index, comment) {
 
-        //展开二级评论
-        $comment.addClass("in");
-        //标记二级评论展开状态
-        e.setAttribute("data-collapse", "in");
-        e.classList.add("active");
+                var $mediaLeftElement = $("<div/>", {
+                    "class": "media-left"
+                }).append($("<img/>", {
+                    "class": "media-object img-rounded",
+                    "src": comment.user.avatarUrl
+                }));
+
+                var $mediaBodyElement = $("<div/>", {
+                    "class": "media-body"
+                }).append($("<h5/>", {
+                    "class": "media-heading",
+                    "text": comment.user.name
+                })).append($("<div/>", {
+                    "text": comment.content
+                })).append($("<div/>", {
+                    "class": "menu pull-right",
+                    "text": moment(comment.gmtCreate).format("YYYY-MM-DD")
+                }));
+
+                var $mediaElement = $("<div/>", {
+                    "class": "media"
+                }).append($mediaLeftElement).append($mediaBodyElement);
+
+                var $commentElement = $("<div/>", {
+                    "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comments"
+                }).append($mediaElement);
+
+                $comment.prepend($commentElement);
+            });
+
+            //展开二级评论
+            $comment.addClass("in");
+            //标记二级评论展开状态
+            e.setAttribute("data-collapse", "in");
+            e.classList.add("active");
+        });
     }
 
 }

@@ -4,6 +4,7 @@ import cn.tecnpan.majiang.helloworld.dto.CommentDto;
 import cn.tecnpan.majiang.helloworld.enums.CommentTypeEnum;
 import cn.tecnpan.majiang.helloworld.enums.CustomizeErrorEnum;
 import cn.tecnpan.majiang.helloworld.exception.CustomizeException;
+import cn.tecnpan.majiang.helloworld.mapper.CommentExtMapper;
 import cn.tecnpan.majiang.helloworld.mapper.CommentMapper;
 import cn.tecnpan.majiang.helloworld.mapper.QuestionExtMapper;
 import cn.tecnpan.majiang.helloworld.mapper.QuestionMapper;
@@ -38,6 +39,9 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
 
+    @Autowired
+    private CommentExtMapper commentExtMapper;
+
     /**
      * 增加评论
      *
@@ -60,7 +64,12 @@ public class CommentServiceImpl implements CommentService {
             if (commentList == null) {
                 throw new CustomizeException(CustomizeErrorEnum.COMMENT_NOT_FOUND);
             }
+            //评论数增加
             commentMapper.insert(comment);
+            Comment record = new Comment();
+            record.setCommentCount(1);
+            record.setId(comment.getParentId());
+            commentExtMapper.incCommentCount(record);
         } else {
             //回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -68,6 +77,7 @@ public class CommentServiceImpl implements CommentService {
                 throw new CustomizeException(CustomizeErrorEnum.QUESTION_NOT_FOUND);
             }
             commentMapper.insert(comment);
+            //评论数增加
             Question record = new Question();
             record.setCommentCount(1);
             record.setId(question.getId());

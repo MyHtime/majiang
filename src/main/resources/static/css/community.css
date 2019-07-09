@@ -84,6 +84,10 @@ body {
     cursor: pointer;
 }
 
+.menu .icon span {
+    margin-right: 3px;
+}
+
 .menu .active {
     color: #499ef3;
 }
