@@ -9,9 +9,10 @@ import lombok.experimental.Accessors;
 @Setter
 @Getter
 @Accessors(chain = true)
-public class ResultDto {
+public class ResultDto<T> {
     private Integer code;
     private String message;
+    private T data;
 
     public static ResultDto errorOf(Integer code, String message) {
         ResultDto resultDto = new ResultDto();
@@ -30,4 +31,10 @@ public class ResultDto {
     public static ResultDto success() {
         return new ResultDto().setCode(200).setMessage("请求成功！");
     }
+
+
+    public static <T> ResultDto success(T t) {
+        return new ResultDto().setCode(200).setMessage("请求成功！").setData(t);
+    }
+
 }

@@ -51,6 +51,19 @@ body {
     padding-bottom: 5px;
     border-bottom: 1px solid #eee;
 }
+
+.sub-comments {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+    padding-top: 15px;
+    border-radius: 10px;
+}
+
+.sub-comments .btn {
+    margin: 10px 0;
+}
+
 .btn-comment {
     float: right;
     margin-bottom: 10px;
@@ -69,6 +82,10 @@ body {
     margin-right: 6px;
     font-size: 15px;
     cursor: pointer;
+}
+
+.menu .active {
+    color: #499ef3;
 }
 
 .menu .icon:hover {

@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,11 +78,12 @@ public class CommentServiceImpl implements CommentService {
     /**
      * 拿出当前问题下的所有评论并携带对应的user信息
      * @param id 问题id
+     * @param commentType 1级评论or2级评论的枚举类型(父类id的类型)
      */
     @Override
-    public List<CommentDto> listByQuestionId(Long id) {
+    public List<CommentDto> listByTargetId(Long id, CommentTypeEnum commentType) {
         CommentExample commentExample = new CommentExample();
-        commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(commentType.getType());
         //按照创建时间排序
         commentExample.setOrderByClause("gmt_create desc");
         List<Comment> commentList = commentMapper.selectByExample(commentExample);
