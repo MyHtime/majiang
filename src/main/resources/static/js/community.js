@@ -80,7 +80,7 @@ function collapseComments(e) {
         $comment.removeClass("in");
         e.removeAttribute("data-collapse");
         e.classList.remove("active");
-        $comment.children(".comments").remove();
+                                                                                                                                                                                                                                                                                                                                $comment.children(".comments").remove();
     } else {
 
         $.getJSON("/comment/" +id,function (data) {
@@ -124,4 +124,22 @@ function collapseComments(e) {
         });
     }
 
+}
+
+function selectTag(e) {
+    var value = e.getAttribute("data-tag");
+    var $tag = $("#tag");
+    var previous = $tag.val();
+
+    if (previous.indexOf(value) == -1) {
+        if (previous) {
+            $tag.val(previous + "," + value);
+        } else {
+            $tag.val(value);
+        }
+    }
+}
+
+function showSelectTag() {
+    $("#selectTag").show();
 }

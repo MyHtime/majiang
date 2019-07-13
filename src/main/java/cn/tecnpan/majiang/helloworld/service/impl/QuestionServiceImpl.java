@@ -115,7 +115,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void createOrUpdate(Question question) {
-        question.setTag(question.getTag().replace("，", ","));
         if (question.getId() == null) {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
