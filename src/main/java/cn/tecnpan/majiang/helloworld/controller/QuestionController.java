@@ -33,6 +33,10 @@ public class QuestionController {
         questionService.incView(id);
         model.addAttribute("question", questionDto);
 
+        //获取这个问题的相关问题（By Tag）
+        List<QuestionDto> relatedQuestionList = questionService.selectRelated(questionDto);
+        model.addAttribute("relatedQuestions", relatedQuestionList);
+
         //获取评论列表，并携带user信息
         List<CommentDto> commentDtoList = commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         model.addAttribute("comments", commentDtoList);

@@ -11,13 +11,17 @@ import cn.tecnpan.majiang.helloworld.model.Question;
 import cn.tecnpan.majiang.helloworld.model.QuestionExample;
 import cn.tecnpan.majiang.helloworld.model.User;
 import cn.tecnpan.majiang.helloworld.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -49,7 +53,10 @@ public class QuestionServiceImpl implements QuestionService {
             pageNo = pagination.getTotalPage();
         }
         Integer offset = pageSize * (pageNo - 1);
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, pageSize));
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gmt_create desc");
+
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, pageSize));
         List<QuestionDto> questionDtoList = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -108,6 +115,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void createOrUpdate(Question question) {
+        question.setTag(question.getTag().replace("，", ","));
         if (question.getId() == null) {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
@@ -139,5 +147,25 @@ public class QuestionServiceImpl implements QuestionService {
         question.setId(id);
         question.setViewCount(1);
         questionExtMapper.incViewCount(question);
+    }
+
+    /**
+     * 查询相关问题
+     */
+    @Override
+    public List<QuestionDto> selectRelated(QuestionDto questionDto) {
+        if (StringUtils.isBlank(questionDto.getTag())) {
+            return new ArrayList<>();
+        }
+        Question question = new Question();
+        question.setId(questionDto.getId());
+        String tags = String.join("|", StringUtils.split(questionDto.getTag(), ","));
+        question.setTag(tags);
+        List<Question> questionList = questionExtMapper.selectRelated(question);
+        return questionList.stream().map(q -> {
+            QuestionDto qd = new QuestionDto();
+            BeanUtils.copyProperties(q, qd);
+            return qd;
+        }).collect(Collectors.toList());
     }
 }

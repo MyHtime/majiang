@@ -4,6 +4,8 @@ import cn.tecnpan.majiang.helloworld.dto.PaginationDto;
 import cn.tecnpan.majiang.helloworld.dto.QuestionDto;
 import cn.tecnpan.majiang.helloworld.model.Question;
 
+import java.util.List;
+
 public interface QuestionService {
 
     void createQuestion(Question question);
@@ -17,4 +19,6 @@ public interface QuestionService {
     void createOrUpdate(Question question);
 
     void incView(Long id);
+
+    List<QuestionDto> selectRelated(QuestionDto questionDto);
 }
