@@ -3,7 +3,6 @@ package cn.tecnpan.majiang.helloworld.controller;
 import cn.tecnpan.majiang.helloworld.dto.NotificationDto;
 import cn.tecnpan.majiang.helloworld.dto.PaginationDto;
 import cn.tecnpan.majiang.helloworld.dto.QuestionDto;
-import cn.tecnpan.majiang.helloworld.model.Notification;
 import cn.tecnpan.majiang.helloworld.model.User;
 import cn.tecnpan.majiang.helloworld.service.NotificationService;
 import cn.tecnpan.majiang.helloworld.service.QuestionService;
@@ -43,8 +42,6 @@ public class ProfileController {
         } else if ("replies".equals(action)) {
             map.put("section", "replies");
             map.put("sectionName", "最新回复");
-            Long unreadCount = notificationService.countUnreadNotify(user.getId());
-            map.put("unreadCount", unreadCount);
             PaginationDto<NotificationDto> pagination = notificationService.list(user.getId(), pageNo, pageSize);
             map.put("pagination", pagination);
         }
