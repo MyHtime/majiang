@@ -1,8 +1,11 @@
 package cn.tecnpan.majiang.helloworld.controller;
 
+import cn.tecnpan.majiang.helloworld.dto.NotificationDto;
 import cn.tecnpan.majiang.helloworld.dto.PaginationDto;
 import cn.tecnpan.majiang.helloworld.dto.QuestionDto;
+import cn.tecnpan.majiang.helloworld.model.Notification;
 import cn.tecnpan.majiang.helloworld.model.User;
+import cn.tecnpan.majiang.helloworld.service.NotificationService;
 import cn.tecnpan.majiang.helloworld.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,9 @@ public class ProfileController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @GetMapping("/profile/{action}")
     public String question(@PathVariable(name = "action") String action,
                            Map<String, Object> map,
@@ -32,13 +38,18 @@ public class ProfileController {
         if ("questions".equals(action)) {
             map.put("section", "questions");
             map.put("sectionName", "我的提问");
+            PaginationDto<QuestionDto> pagination = questionService.list(user.getId(), pageNo, pageSize);
+            map.put("pagination", pagination);
         } else if ("replies".equals(action)) {
             map.put("section", "replies");
             map.put("sectionName", "最新回复");
+            Long unreadCount = notificationService.countUnreadNotify(user.getId());
+            map.put("unreadCount", unreadCount);
+            PaginationDto<NotificationDto> pagination = notificationService.list(user.getId(), pageNo, pageSize);
+            map.put("pagination", pagination);
         }
 
-        PaginationDto<QuestionDto> pagination = questionService.list(user.getId(), pageNo, pageSize);
-        map.put("pagination", pagination);
+
         return "profile";
     }
 }

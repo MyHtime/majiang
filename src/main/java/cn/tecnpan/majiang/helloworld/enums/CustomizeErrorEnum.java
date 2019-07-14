@@ -9,7 +9,10 @@ public enum CustomizeErrorEnum implements CustomizeErrorCode {
     SYSTEM_ERROR(2004, "服务GG，请等待！"),
     TYPE_PARAM_WRONG(2005, "评论类型错误或不存在！"),
     COMMENT_NOT_FOUND(2006, "你操作的评论不存在！"),
-    CONTENT_IS_EMPTY(2007, "输入内容不能为空！");
+    CONTENT_IS_EMPTY(2007, "输入内容不能为空！"),
+    READ_NOTIFICATION_FAIL(2008, "当前登录的用户不是该通知的接收者！"),
+    NOTIFICATION_NOT_FOUND(2009, "消息不存在！"),
+    ;
 
     private Integer code;
     private String message;

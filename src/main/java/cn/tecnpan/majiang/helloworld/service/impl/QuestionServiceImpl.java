@@ -66,7 +66,9 @@ public class QuestionServiceImpl implements QuestionService {
             questionDtoList.add(questionDto);
         }
         pagination.setObjectList(questionDtoList);
-        pagination.init(pageNo);
+        if (pagination.getTotalPage() != 0) {
+            pagination.init(pageNo);
+        }
         return pagination;
     }
 
@@ -96,7 +98,9 @@ public class QuestionServiceImpl implements QuestionService {
             questionDtoList.add(questionDto);
         }
         pagination.setObjectList(questionDtoList);
-        pagination.init(pageNo);
+        if (pagination.getTotalPage() != 0) {
+            pagination.init(pageNo);
+        }
         return pagination;
     }
 

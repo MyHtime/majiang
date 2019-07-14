@@ -3,14 +3,18 @@ package cn.tecnpan.majiang.helloworld.service.impl;
 import cn.tecnpan.majiang.helloworld.dto.CommentDto;
 import cn.tecnpan.majiang.helloworld.enums.CommentTypeEnum;
 import cn.tecnpan.majiang.helloworld.enums.CustomizeErrorEnum;
+import cn.tecnpan.majiang.helloworld.enums.NotificationStatusEnum;
+import cn.tecnpan.majiang.helloworld.enums.NotificationTypeEnum;
 import cn.tecnpan.majiang.helloworld.exception.CustomizeException;
 import cn.tecnpan.majiang.helloworld.mapper.CommentExtMapper;
 import cn.tecnpan.majiang.helloworld.mapper.CommentMapper;
+import cn.tecnpan.majiang.helloworld.mapper.NotificationMapper;
 import cn.tecnpan.majiang.helloworld.mapper.QuestionExtMapper;
 import cn.tecnpan.majiang.helloworld.mapper.QuestionMapper;
 import cn.tecnpan.majiang.helloworld.mapper.UserMapper;
 import cn.tecnpan.majiang.helloworld.model.Comment;
 import cn.tecnpan.majiang.helloworld.model.CommentExample;
+import cn.tecnpan.majiang.helloworld.model.Notification;
 import cn.tecnpan.majiang.helloworld.model.Question;
 import cn.tecnpan.majiang.helloworld.model.User;
 import cn.tecnpan.majiang.helloworld.model.UserExample;
@@ -42,14 +46,18 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentExtMapper commentExtMapper;
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     /**
      * 增加评论
      *
-     * @param comment 评论
+     * @param comment 评论（来自html，其parentId为父级内容的ID）
+     * @param commentator 评论者
      */
     @Override
     @Transactional
-    public void insert(Comment comment) {
+    public void insert(Comment comment, User commentator) {
         if (comment.getParentId() == null || comment.getParentId() == 0) {
             throw new CustomizeException(CustomizeErrorEnum.TARGET_PARAM_NOT_FOUND);
         }
@@ -57,19 +65,28 @@ public class CommentServiceImpl implements CommentService {
             throw new CustomizeException(CustomizeErrorEnum.TYPE_PARAM_WRONG);
         }
         if (comment.getType().equals(CommentTypeEnum.COMMENT.getType())) {
-            //回复评论
-            CommentExample commentExample = new CommentExample();
-            commentExample.createCriteria().andParentIdEqualTo(comment.getParentId());
-            List<Comment> commentList = commentMapper.selectByExample(commentExample);
-            if (commentList == null) {
+            //查询父类内容
+            Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
+            if (dbComment == null) {
                 throw new CustomizeException(CustomizeErrorEnum.COMMENT_NOT_FOUND);
             }
-            //评论数增加
+
+            //获取回复评论的对应的问题
+            Question question = questionMapper.selectByPrimaryKey(dbComment.getParentId());
+            if (question == null) {
+                throw new CustomizeException(CustomizeErrorEnum.QUESTION_NOT_FOUND);
+            }
+
+
+            //回复评论
             commentMapper.insert(comment);
-            Comment record = new Comment();
-            record.setCommentCount(1);
-            record.setId(comment.getParentId());
-            commentExtMapper.incCommentCount(record);
+            //评论数增加
+            Comment parentComment = new Comment();
+            parentComment.setCommentCount(1);
+            parentComment.setId(comment.getParentId());
+            commentExtMapper.incCommentCount(parentComment);
+            //完成回复评论，添加通知
+            createNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT, question.getId());
         } else {
             //回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -82,7 +99,36 @@ public class CommentServiceImpl implements CommentService {
             record.setCommentCount(1);
             record.setId(question.getId());
             questionExtMapper.incCommentCount(record);
+            //完成回复问题，添加通知
+            createNotify(comment, question.getCreator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUESTION, question.getId());
         }
+    }
+
+    /**
+     * 创建通知
+     * @param comment 一条评论对象
+     * @param receiver 接收通知的人
+     * @param notifierName 发出通知的人
+     * @param outerTitle 回复/评论的 内容
+     * @param notificationType 通知类型
+     * @param outerId 被评论问题的id
+     */
+    private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, Long outerId) {
+        Notification notify = new Notification();
+        notify.setGmtCreate(System.currentTimeMillis());
+        notify.setType(notificationType.getType());
+        //被评论问题的ID
+        notify.setOuterId(outerId);
+        //被评论问题的标签
+        notify.setOuterTitle(outerTitle);
+        //发起通知者ID（评论者ID）
+        notify.setNotifier(comment.getCommentator());
+        //发起通知者的名字
+        notify.setNotifierName(notifierName);
+        //通知接收者ID（问题创建者）
+        notify.setReceiver(receiver);
+        notify.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notificationMapper.insert(notify);
     }
 
     /**
