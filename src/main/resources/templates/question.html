@@ -9,9 +9,13 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css" th:href="@{/css/bootstrap-theme.min.css}">
     <link rel="stylesheet" href="/css/community.css" th:href="@{/css/community.css}">
+    <link rel="stylesheet" href="editormd/css/editormd.preview.css" th:href="@{/editormd/css/editormd.preview.css}"/>
     <script type="application/javascript" src="/js/jquery-3.4.0.min.js" th:src="@{/js/jquery-3.4.0.min.js}"></script>
     <script type="application/javascript" src="/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
     <script type="application/javascript" src="/js/moment.min.js" th:src="@{/js/moment.min.js}"></script>
+    <script th:src="@{/editormd/editormd.js}"></script>
+    <script th:src="@{/editormd/lib/marked.min.js}"></script>
+    <script th:src="@{/editormd/lib/prettify.min.js}"></script>
     <script type="application/javascript" src="/js/community.js" th:src="@{/js/community.js}"></script>
 </head>
 <body>
@@ -30,7 +34,14 @@
                 </span>
                 <!--描述-->
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${question.description}"></div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
+                    <textarea th:text="${question.description}" style="display:none;"></textarea>
+                </div>
+                <script type="text/javascript">
+                    $(function() {
+                        editormd.markdownToHTML("question-view", {});
+                    });
+                </script>
                 <!--标签-->
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

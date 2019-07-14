@@ -123,13 +123,17 @@ public class QuestionServiceImpl implements QuestionService {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setCommentCount(0);
+            question.setViewCount(0);
+            question.setLikeCount(0);
             questionMapper.insert(question);
         } else {
             //更新
-            question.setGmtModified(System.currentTimeMillis());
-
             Question questionRecord = new Question();
             questionRecord.setGmtModified(System.currentTimeMillis());
+            questionRecord.setTitle(question.getTitle());
+            questionRecord.setDescription(question.getDescription());
+            questionRecord.setTag(question.getTag());
 
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
