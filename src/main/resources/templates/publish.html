@@ -38,16 +38,15 @@
                            onclick="showSelectTag()">
                     <div id="selectTag" class="publish-tag-tab">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" th:class="${iterStat.index == 0} ? active" th:each="tagDto, iterStat : ${tagDaoList}">
+                            <li role="presentation" th:class="${iterStat.first} ? 'active'" th:each="tagDto, iterStat : ${tagDaoList}">
                                 <a th:href="'#' + ${tagDto.categoryName}" th:aria-controls="${tagDto.categoryName}" role="tab" data-toggle="tab" th:text="${tagDto.categoryName}"></a>
                             </li>
                         </ul>
 
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane" th:classappend="${tagDtoStat.index == 0}? active" th:id="${tagDto.categoryName}" th:each="tagDto:${tagDaoList}">
+                            <div role="tabpanel" class="tab-pane" th:classappend="${tagDtoStat.first}? 'active'" th:id="${tagDto.categoryName}" th:each="tagDto:${tagDaoList}">
                                 <span class="label label-info" th:each="selectTag:${tagDto.tags}">
-                                    <br th:if="${(selectTagStat.index + 1) % 11 == 0}">
-                                    <span class="glyphicon glyphicon-tags" onclick="selectTag(this)" th:data-tag="${selectTag}" th:text="${selectTag}"></span>
+                                    <span class="glyphicon glyphicon-tags" onclick="selectTag(this)" th:data-tag="${selectTag}" th:text="${' ' + selectTag}"></span>
                                 </span>
                             </div>
                         </div>
