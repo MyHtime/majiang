@@ -39,11 +39,25 @@
                             height: 350,
                             path: "/editormd/lib/",
                             delay: 0,
-                            placeholder: "请输入问题描述"
+                            placeholder: "请输入问题描述",
+                            imageUpload: true,
+                            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                            imageUploadURL: "/file/upload",
+                            onfullscreen : function() {
+                                $("#right").hide();
+                                $("#btn-div").hide();
+                                $("#tag-div").hide();
+                            },
+                            onfullscreenExit : function() {
+                                $("#right").show();
+                                $("#btn-div").show();
+                                $("#tag-div").show();
+                            }
+
                         });
                     });
                 </script>
-                <div class="form-group">
+                <div class="form-group" id="tag-div">
                     <label for="tag">添加标签:</label>
                     <input type="text" class="form-control" name="tag" id="tag" th:value="${tag}"
                            placeholder="输入标签，以逗号（，）分隔"
@@ -65,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="container-fluid main">
+                <div class="container-fluid main" id="btn-div">
                     <div class="row">
 <!--                        <div class="alert alert-danger col-lg-9 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error != null}"></div>-->
 <!--                        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error == null}"></div>-->
@@ -80,7 +94,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" id="right">
             <h3>问题发起指南</h3>
             • 问题标题: 请用精简的语言描述您发布的问题，不超过25字 <br>
             • 问题补充: 详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料<br>
