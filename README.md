@@ -11,6 +11,7 @@
 [OkHttp](https://square.github.io/okhttp/)<br>
 [SpringBoot DataSource](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)<br>
 [mybatis-spring-boot-autoconfigure](http://www.mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)<br>
+[ufile-sdk-java](https://github.com/ucloud/ufile-sdk-java)  
 
 ## 工具
 [Git](https://git-scm.com/download)<br>

@@ -23,17 +23,47 @@ import java.util.UUID;
 @Component
 public class UCloudProvider {
 
+    /**
+     * 公钥
+     */
     @Value("${ucloud.ufile.public-key}")
     private String publicKey;
 
+    /**
+     * 验证地址
+     */
     @Value("${ucloud.ufile.apply.auth}")
     private String applyAuth;
 
+    /**
+     * 验证地址
+     */
     @Value("${ucloud.ufile.apply.private-url-auth}")
     private String applyPrivateUrlAuth;
 
+    /**
+     * 空间名
+     */
     @Value("${ucloud.ufile.bucket-name}")
     private String bucketName;
+
+    /**
+     * 有效时限
+     */
+    @Value("${ucloud.ufile.expires-duration}")
+    private int expiresDuration;
+
+    /**
+     * 仓库地区
+     */
+    @Value("${ucloud.ufile.region}")
+    private String region;
+
+    /**
+     * 代理后缀
+     */
+    @Value("${ucloud.ufile.proxy-suffix}")
+    private String proxySuffix;
 
     /**
      *
@@ -52,7 +82,7 @@ public class UCloudProvider {
         }
 
         ObjectAuthorization objectAuthorizer = new UfileObjectRemoteAuthorization(publicKey, new ObjectRemoteAuthorization.ApiConfig(applyAuth, applyPrivateUrlAuth));
-        ObjectConfig config = new ObjectConfig("cn-bj", "ufileos.com");
+        ObjectConfig config = new ObjectConfig(region, proxySuffix);
         try {
             PutObjectResultBean response = UfileClient.object(objectAuthorizer, config)
                     .putObject(inputStream, mimeType)
@@ -75,7 +105,7 @@ public class UCloudProvider {
                     .execute();
             if (response != null && response.getRetCode() == 0) {
                 return UfileClient.object(objectAuthorizer, config)
-                        .getDownloadUrlFromPrivateBucket(generatedFileName, bucketName, 24 * 60 * 60)
+                        .getDownloadUrlFromPrivateBucket(generatedFileName, bucketName, expiresDuration)
                         .createUrl();
             } else {
                 throw new CustomizeException(CustomizeErrorEnum.FILE_UPLOAD_FAIL);
