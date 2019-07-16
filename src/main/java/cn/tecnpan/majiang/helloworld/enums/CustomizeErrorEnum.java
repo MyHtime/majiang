@@ -12,6 +12,7 @@ public enum CustomizeErrorEnum implements CustomizeErrorCode {
     CONTENT_IS_EMPTY(2007, "输入内容不能为空！"),
     READ_NOTIFICATION_FAIL(2008, "当前登录的用户不是该通知的接收者！"),
     NOTIFICATION_NOT_FOUND(2009, "消息不存在！"),
+    FILE_UPLOAD_FAIL(2010, "上传失败！"),
     ;
 
     private Integer code;

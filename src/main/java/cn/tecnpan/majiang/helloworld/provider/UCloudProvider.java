@@ -1,5 +1,7 @@
 package cn.tecnpan.majiang.helloworld.provider;
 
+import cn.tecnpan.majiang.helloworld.enums.CustomizeErrorEnum;
+import cn.tecnpan.majiang.helloworld.exception.CustomizeException;
 import cn.ucloud.ufile.UfileClient;
 import cn.ucloud.ufile.api.object.ObjectConfig;
 import cn.ucloud.ufile.auth.ObjectAuthorization;
@@ -30,6 +32,9 @@ public class UCloudProvider {
     @Value("${ucloud.ufile.apply.private-url-auth}")
     private String applyPrivateUrlAuth;
 
+    @Value("${ucloud.ufile.bucket-name}")
+    private String bucketName;
+
     /**
      *
      * @param inputStream 输入流
@@ -43,7 +48,7 @@ public class UCloudProvider {
         if (fileSplit.length > 1) {
             generatedFileName = UUID.randomUUID().toString() + "." + fileSplit[fileSplit.length - 1];
         } else {
-            return null;
+            throw new CustomizeException(CustomizeErrorEnum.FILE_UPLOAD_FAIL);
         }
 
         ObjectAuthorization objectAuthorizer = new UfileObjectRemoteAuthorization(publicKey, new ObjectRemoteAuthorization.ApiConfig(applyAuth, applyPrivateUrlAuth));
@@ -52,7 +57,7 @@ public class UCloudProvider {
             PutObjectResultBean response = UfileClient.object(objectAuthorizer, config)
                     .putObject(inputStream, mimeType)
                     .nameAs(generatedFileName)
-                    .toBucket("techpan")
+                    .toBucket(bucketName)
                     /**
                      * 是否上传校验MD5, Default = true
                      */
@@ -68,11 +73,17 @@ public class UCloudProvider {
 
                     })
                     .execute();
+            if (response != null && response.getRetCode() == 0) {
+                return UfileClient.object(objectAuthorizer, config)
+                        .getDownloadUrlFromPrivateBucket(generatedFileName, bucketName, 24 * 60 * 60)
+                        .createUrl();
+            } else {
+                throw new CustomizeException(CustomizeErrorEnum.FILE_UPLOAD_FAIL);
+            }
         } catch (UfileClientException | UfileServerException e) {
             e.printStackTrace();
-            return null;
+            throw new CustomizeException(CustomizeErrorEnum.FILE_UPLOAD_FAIL);
         }
-        return generatedFileName;
     }
 
 

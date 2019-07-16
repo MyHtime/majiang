@@ -24,13 +24,13 @@ public class FileController {
     @ResponseBody
     @RequestMapping("/file/upload")
     public FileDto upload(@RequestParam("editormd-image-file") MultipartFile multipartFile) {
-        String fileName = "";
+        String url = "";
         try {
-            fileName = uCloudProvider.upload(multipartFile.getInputStream(), multipartFile.getContentType(), Objects.requireNonNull(multipartFile.getOriginalFilename()));
+            url = uCloudProvider.upload(multipartFile.getInputStream(), multipartFile.getContentType(), Objects.requireNonNull(multipartFile.getOriginalFilename()));
+            return new FileDto().setSuccess(1).setUrl(url).setMessage("上传成功");
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
-        System.out.println(fileName);
-        return new FileDto().setSuccess(1).setUrl("/img/wallpaper01.jpg");
+        return new FileDto().setSuccess(0).setUrl(url).setMessage("上传失败");
     }
 }
