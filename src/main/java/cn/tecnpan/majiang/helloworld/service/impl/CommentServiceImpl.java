@@ -114,6 +114,10 @@ public class CommentServiceImpl implements CommentService {
      * @param outerId 被评论问题的id
      */
     private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, Long outerId) {
+        if (receiver.equals(comment.getCommentator())) {
+            //通知人和评论人相同
+            return;
+        }
         Notification notify = new Notification();
         notify.setGmtCreate(System.currentTimeMillis());
         notify.setType(notificationType.getType());

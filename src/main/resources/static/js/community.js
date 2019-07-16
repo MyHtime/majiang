@@ -84,7 +84,7 @@ function collapseComments(e) {
     } else {
 
         $.getJSON("/comment/" +id,function (data) {
-            $.each(data.data.reverse(), function (index, comment) {
+            $.each(data.data, function (index, comment) {
 
                 var $mediaLeftElement = $("<div/>", {
                     "class": "media-left"
@@ -102,7 +102,7 @@ function collapseComments(e) {
                     "text": comment.content
                 })).append($("<div/>", {
                     "class": "menu pull-right",
-                    "text": moment(comment.gmtCreate).format("YYYY-MM-DD")
+                    "text": moment(comment.gmtCreate).format("YYYY-MM-DD HH:mm:ss")
                 }));
 
                 var $mediaElement = $("<div/>", {

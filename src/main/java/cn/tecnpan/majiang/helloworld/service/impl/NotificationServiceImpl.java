@@ -32,7 +32,11 @@ public class NotificationServiceImpl implements NotificationService {
      */
     @Override
     public PaginationDto<NotificationDto> list(Long userId, Integer pageNo, Integer pageSize) {
-        PaginationDto<NotificationDto> pagination = new PaginationDto<>((int)notificationMapper.countByExample(new NotificationExample()), pageSize);
+        NotificationExample notificationExample = new NotificationExample();
+        notificationExample.createCriteria().andReceiverEqualTo(userId);
+        notificationExample.setOrderByClause("gmt_create desc");
+
+        PaginationDto<NotificationDto> pagination = new PaginationDto<>((int)notificationMapper.countByExample(notificationExample), pageSize);
         if (pageNo < 1) {
             pageNo = 1;
         }
@@ -40,9 +44,6 @@ public class NotificationServiceImpl implements NotificationService {
             pageNo = pagination.getTotalPage();
         }
         Integer offset = pageSize * (pageNo - 1);
-        NotificationExample notificationExample = new NotificationExample();
-        notificationExample.createCriteria().andReceiverEqualTo(userId);
-        notificationExample.setOrderByClause("gmt_create desc");
 
         List<Notification> notificationList = notificationMapper.selectByExampleWithRowbounds(notificationExample, new RowBounds(offset, pageSize));
         if (notificationList.size() == 0) {
