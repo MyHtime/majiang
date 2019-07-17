@@ -30,10 +30,12 @@ public class IndexController {
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model,
                         @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                        @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize) {
+                        @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
+                        @RequestParam(name = "search", required = false) String search) {
 
-        PaginationDto<QuestionDto> page = questionService.getList(pageNo, pageSize);
+        PaginationDto<QuestionDto> page = questionService.getList(search, pageNo, pageSize);
         model.addAttribute("pagination", page);
+        model.addAttribute("search", search);
         return "index";
     }
 }

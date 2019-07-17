@@ -10,7 +10,7 @@ public interface QuestionService {
 
     void createQuestion(Question question);
 
-    PaginationDto<QuestionDto> getList(Integer pageNo, Integer pageSize);
+    PaginationDto<QuestionDto> getList(String search, Integer pageNo, Integer pageSize);
 
     PaginationDto<QuestionDto> list(Long id, Integer pageNo, Integer pageSize);
 

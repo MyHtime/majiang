@@ -44,27 +44,27 @@
             <nav aria-label="Page navigation" class="text-center">
                 <ul class="pagination">
                     <li th:if="${pagination.showFirst}">
-                        <a href="#" aria-label="Previous" th:href="@{/(pageNo=1)}" title="首页">
+                        <a href="#" aria-label="Previous" th:href="@{/(pageNo=1, search=${search})}" title="首页">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
                     <li th:if="${pagination.hasPrevious}">
-                        <a href="#" aria-label="Previous" th:href="@{/(pageNo=${pagination.currentPageNo - 1})}" title="上一页">
+                        <a href="#" aria-label="Previous" th:href="@{/(pageNo=${pagination.currentPageNo - 1}, search=${search})}" title="上一页">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
                     <li th:each="pageNo:${pagination.pageNoList}" th:class="${pageNo == pagination.currentPageNo} ? 'active'">
-                        <a href="#" th:text="${pageNo}" th:href="@{/(pageNo=${pageNo})}">
+                        <a href="#" th:text="${pageNo}" th:href="@{/(pageNo=${pageNo}, search=${search})}">
 
                         </a>
                     </li>
                     <li th:if="${pagination.hasNext}">
-                        <a href="#" aria-label="Next" th:href="@{/(pageNo=${pagination.currentPageNo + 1})}" title="下一页">
+                        <a href="#" aria-label="Next" th:href="@{/(pageNo=${pagination.currentPageNo + 1}, search=${search})}" title="下一页">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
                     <li th:if="${pagination.showLast}">
-                        <a href="#" aria-label="Next" th:href="@{/(pageNo=${pagination.totalPage})}"  title="尾页">
+                        <a href="#" aria-label="Next" th:href="@{/(pageNo=${pagination.totalPage}, search=${search})}"  title="尾页">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>
                     </li>

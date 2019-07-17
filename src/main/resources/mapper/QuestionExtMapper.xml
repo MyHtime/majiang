@@ -28,5 +28,23 @@
     <select id="selectRelated" resultMap="BaseResultMap">
         select * from QUESTION where id != #{question.id} and tag REGEXP #{question.tag}
     </select>
+    <select id="countBySearch" resultType="java.lang.Integer">
+        select count(*) from QUESTION
+        <where>
+            <if test="questionQueryDto.search != null">
+                TITLE REGEXP #{questionQueryDto.search}
+            </if>
+        </where>
+    </select>
+    <select id="selectBySearchWithRowBounds" resultMap="BaseResultMap">
+        select * from QUESTION
+        <where>
+            <if test="questionQueryDto.search != null">
+                TITLE REGEXP #{questionQueryDto.search}
+            </if>
+        </where>
+        order by gmt_create desc
+        limit #{questionQueryDto.offset}, #{questionQueryDto.pageSize}
+    </select>
 
 </mapper>

@@ -2,6 +2,7 @@ package cn.tecnpan.majiang.helloworld.service.impl;
 
 import cn.tecnpan.majiang.helloworld.dto.PaginationDto;
 import cn.tecnpan.majiang.helloworld.dto.QuestionDto;
+import cn.tecnpan.majiang.helloworld.dto.QuestionQueryDto;
 import cn.tecnpan.majiang.helloworld.enums.CustomizeErrorEnum;
 import cn.tecnpan.majiang.helloworld.exception.CustomizeException;
 import cn.tecnpan.majiang.helloworld.mapper.QuestionExtMapper;
@@ -18,9 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,8 +43,14 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public PaginationDto<QuestionDto> getList(Integer pageNo, Integer pageSize) {
-        PaginationDto<QuestionDto> pagination = new PaginationDto<>((int)questionMapper.countByExample(new QuestionExample()), pageSize);
+    public PaginationDto<QuestionDto> getList(String search, Integer pageNo, Integer pageSize) {
+
+        if (StringUtils.isNotBlank(search)) {
+            search = String.join("|", StringUtils.split(search, " "));
+        }
+
+        QuestionQueryDto questionQueryDto = new QuestionQueryDto().setSearch(search);
+        PaginationDto<QuestionDto> pagination = new PaginationDto<>(questionExtMapper.countBySearch(questionQueryDto), pageSize);
         if (pageNo < 1) {
             pageNo = 1;
         }
@@ -53,10 +58,8 @@ public class QuestionServiceImpl implements QuestionService {
             pageNo = pagination.getTotalPage();
         }
         Integer offset = pageSize * (pageNo - 1);
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.setOrderByClause("gmt_create desc");
-
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, pageSize));
+        questionQueryDto.setOffset(offset).setPageSize(pageSize);
+        List<Question> questions = questionExtMapper.selectBySearchWithRowBounds(questionQueryDto);
         List<QuestionDto> questionDtoList = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());

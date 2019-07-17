@@ -1,5 +1,6 @@
 package cn.tecnpan.majiang.helloworld.mapper;
 
+import cn.tecnpan.majiang.helloworld.dto.QuestionQueryDto;
 import cn.tecnpan.majiang.helloworld.model.Question;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,4 +19,8 @@ public interface QuestionExtMapper {
      * 查询对应tag的问题
      */
     List<Question> selectRelated(@Param("question") Question question);
+
+    Integer countBySearch(@Param("questionQueryDto") QuestionQueryDto questionQueryDto);
+
+    List<Question> selectBySearchWithRowBounds(@Param("questionQueryDto")QuestionQueryDto questionQueryDto);
 }
