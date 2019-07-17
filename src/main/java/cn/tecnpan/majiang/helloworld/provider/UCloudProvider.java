@@ -10,6 +10,7 @@ import cn.ucloud.ufile.auth.UfileObjectRemoteAuthorization;
 import cn.ucloud.ufile.bean.PutObjectResultBean;
 import cn.ucloud.ufile.exception.UfileClientException;
 import cn.ucloud.ufile.exception.UfileServerException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,7 @@ import java.util.UUID;
  * https://www.ucloud.cn/
  */
 @Component
+@Slf4j
 public class UCloudProvider {
 
     /**
@@ -108,10 +110,11 @@ public class UCloudProvider {
                         .getDownloadUrlFromPrivateBucket(generatedFileName, bucketName, expiresDuration)
                         .createUrl();
             } else {
+                log.error("upload error,{}", response);
                 throw new CustomizeException(CustomizeErrorEnum.FILE_UPLOAD_FAIL);
             }
         } catch (UfileClientException | UfileServerException e) {
-            e.printStackTrace();
+            log.error("upload error,{}", fileName, e);
             throw new CustomizeException(CustomizeErrorEnum.FILE_UPLOAD_FAIL);
         }
     }

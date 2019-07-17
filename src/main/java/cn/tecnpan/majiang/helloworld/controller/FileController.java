@@ -2,6 +2,7 @@ package cn.tecnpan.majiang.helloworld.controller;
 
 import cn.tecnpan.majiang.helloworld.dto.FileDto;
 import cn.tecnpan.majiang.helloworld.provider.UCloudProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 @Controller
+@Slf4j
 public class FileController {
 
     @Autowired
@@ -29,8 +31,8 @@ public class FileController {
             url = uCloudProvider.upload(multipartFile.getInputStream(), multipartFile.getContentType(), Objects.requireNonNull(multipartFile.getOriginalFilename()));
             return new FileDto().setSuccess(1).setUrl(url).setMessage("上传成功");
         } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
+            log.error("upload error", e);
+            return new FileDto().setSuccess(0).setMessage("上传失败");
         }
-        return new FileDto().setSuccess(0).setUrl(url).setMessage("上传失败");
     }
 }

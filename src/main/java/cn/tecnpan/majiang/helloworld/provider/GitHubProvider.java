@@ -3,6 +3,7 @@ package cn.tecnpan.majiang.helloworld.provider;
 import cn.tecnpan.majiang.helloworld.dto.AccessTokenDto;
 import cn.tecnpan.majiang.helloworld.dto.GitHubUserDto;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,6 +18,7 @@ import java.io.IOException;
  * 2. @Component 把当前类初始化到Spring容器的上下文
  */
 @Component
+@Slf4j
 public class GitHubProvider {
 
     /**
@@ -38,7 +40,7 @@ public class GitHubProvider {
             String string = response.body().string();
             return string.split("&")[0].split("=")[1];
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("getAccessToken error,{}", accessTokenDto, e);
         }
         return null;
     }
@@ -60,7 +62,7 @@ public class GitHubProvider {
             String string = response.body().string();
             return JSON.parseObject(string, GitHubUserDto.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("getUser error,{}", accessToken, e);
         }
         return null;
     }
