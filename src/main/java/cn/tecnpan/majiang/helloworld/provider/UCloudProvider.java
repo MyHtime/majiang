@@ -1,16 +1,16 @@
 package cn.tecnpan.majiang.helloworld.provider;
 
+import cn.tecnpan.majiang.helloworld.dto.AuthConfigDto;
 import cn.tecnpan.majiang.helloworld.enums.CustomizeErrorEnum;
 import cn.tecnpan.majiang.helloworld.exception.CustomizeException;
 import cn.ucloud.ufile.UfileClient;
 import cn.ucloud.ufile.api.object.ObjectConfig;
 import cn.ucloud.ufile.auth.ObjectAuthorization;
-import cn.ucloud.ufile.auth.ObjectRemoteAuthorization;
-import cn.ucloud.ufile.auth.UfileObjectRemoteAuthorization;
 import cn.ucloud.ufile.bean.PutObjectResultBean;
 import cn.ucloud.ufile.exception.UfileClientException;
 import cn.ucloud.ufile.exception.UfileServerException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -25,47 +25,20 @@ import java.util.UUID;
 @Slf4j
 public class UCloudProvider {
 
-    /**
-     * 公钥
-     */
-    @Value("${ucloud.ufile.public-key}")
-    private String publicKey;
+    @Autowired
+    private AuthConfigDto authConfigDto;
 
-    /**
-     * 验证地址
-     */
-    @Value("${ucloud.ufile.apply.auth}")
-    private String applyAuth;
+    @Autowired
+    private ObjectAuthorization objectAuthorization;
 
-    /**
-     * 验证地址
-     */
-    @Value("${ucloud.ufile.apply.private-url-auth}")
-    private String applyPrivateUrlAuth;
-
-    /**
-     * 空间名
-     */
-    @Value("${ucloud.ufile.bucket-name}")
-    private String bucketName;
+    @Autowired
+    private ObjectConfig objectConfig;
 
     /**
      * 有效时限
      */
     @Value("${ucloud.ufile.expires-duration}")
     private int expiresDuration;
-
-    /**
-     * 仓库地区
-     */
-    @Value("${ucloud.ufile.region}")
-    private String region;
-
-    /**
-     * 代理后缀
-     */
-    @Value("${ucloud.ufile.proxy-suffix}")
-    private String proxySuffix;
 
     /**
      *
@@ -83,13 +56,11 @@ public class UCloudProvider {
             throw new CustomizeException(CustomizeErrorEnum.FILE_UPLOAD_FAIL);
         }
 
-        ObjectAuthorization objectAuthorizer = new UfileObjectRemoteAuthorization(publicKey, new ObjectRemoteAuthorization.ApiConfig(applyAuth, applyPrivateUrlAuth));
-        ObjectConfig config = new ObjectConfig(region, proxySuffix);
         try {
-            PutObjectResultBean response = UfileClient.object(objectAuthorizer, config)
+            PutObjectResultBean response = UfileClient.object(objectAuthorization, objectConfig)
                     .putObject(inputStream, mimeType)
                     .nameAs(generatedFileName)
-                    .toBucket(bucketName)
+                    .toBucket(authConfigDto.getUFileBucketName())
                     /**
                      * 是否上传校验MD5, Default = true
                      */
@@ -106,8 +77,8 @@ public class UCloudProvider {
                     })
                     .execute();
             if (response != null && response.getRetCode() == 0) {
-                return UfileClient.object(objectAuthorizer, config)
-                        .getDownloadUrlFromPrivateBucket(generatedFileName, bucketName, expiresDuration)
+                return UfileClient.object(objectAuthorization, objectConfig)
+                        .getDownloadUrlFromPrivateBucket(generatedFileName, authConfigDto.getUFileBucketName(), expiresDuration)
                         .createUrl();
             } else {
                 log.error("upload error,{}", response);

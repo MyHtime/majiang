@@ -1,13 +1,13 @@
 package cn.tecnpan.majiang.helloworld.controller;
 
 import cn.tecnpan.majiang.helloworld.dto.AccessTokenDto;
+import cn.tecnpan.majiang.helloworld.dto.AuthConfigDto;
 import cn.tecnpan.majiang.helloworld.dto.GitHubUserDto;
 import cn.tecnpan.majiang.helloworld.model.User;
 import cn.tecnpan.majiang.helloworld.provider.GitHubProvider;
 import cn.tecnpan.majiang.helloworld.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,14 +24,8 @@ public class AuthorizeController {
     @Autowired
     private GitHubProvider gitHubProvider;
 
-    @Value("${github.client.id}")
-    private String clientId;
-
-    @Value("${github.client.secret}")
-    private String clientSecret;
-
-    @Value("${github.redirect.uri}")
-    private String redirectUri;
+    @Autowired
+    private AuthConfigDto authConfigDto;
 
     @Autowired
     private UserService userService;
@@ -39,10 +33,11 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam("code") String code, @RequestParam("state") String state, HttpServletResponse response) {
         AccessTokenDto accessTokenDto = new AccessTokenDto();
-        accessTokenDto.setClient_id(clientId);
-        accessTokenDto.setClient_secret(clientSecret);
+        accessTokenDto.setClient_id(authConfigDto.getGithubClientId());
+        accessTokenDto.setClient_secret(accessTokenDto.getClient_secret());
         accessTokenDto.setCode(code);
-        accessTokenDto.setRedirect_uri(redirectUri);
+        accessTokenDto.setRedirect_uri(authConfigDto.getGithubRedirectUri());
+        accessTokenDto.setClient_secret(authConfigDto.getGithubClientSecret());
         accessTokenDto.setState(state);
         String accessToken = gitHubProvider.getAccessToken(accessTokenDto);
         GitHubUserDto gitHubUserDto = gitHubProvider.getGitHubUser(accessToken);
